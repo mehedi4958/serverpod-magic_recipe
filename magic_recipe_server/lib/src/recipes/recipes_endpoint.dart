@@ -43,6 +43,8 @@ class RecipesEndpoint extends Endpoint {
       ingredients: ingredients,
     );
 
-    return recipe;
+    final recipeWithId = await Recipe.db.insertRow(session, recipe);
+
+    return recipeWithId;
   }
 }
