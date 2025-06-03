@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:serverpod/serverpod.dart';
 
@@ -11,10 +13,10 @@ class RecipesEndpoint extends Endpoint {
     // in the session.passwords map.
     final geminiApiKey = session.passwords['gemini'];
     if (geminiApiKey == null) {
-      throw Exception('Gemini API key not found!');
+      throw Exception('Gemini API key not found');
     }
     final gemini = GenerativeModel(
-      model: "gemini-2.0-flash",
+      model: 'gemini-2.0-flash',
       apiKey: geminiApiKey,
     );
 
@@ -25,6 +27,7 @@ class RecipesEndpoint extends Endpoint {
         'to follow and include all necessary steps. Please provide a detailed recipe.';
 
     final response = await gemini.generateContent([Content.text(prompt)]);
+
     final responseText = response.text;
 
     // Check if the response is empty or null
