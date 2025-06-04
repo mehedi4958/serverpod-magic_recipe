@@ -39,7 +39,7 @@ class RecipesEndpoint extends Endpoint {
 
     // final response = await generateContent(geminiApiKey,prompt);
 
-    final responseText = await generateContent(geminiApiKey,prompt);
+    final responseText = await generateContent(geminiApiKey, prompt);
 
     // Check if the response is empty or null
     if (responseText == null || responseText.isEmpty) {
@@ -62,7 +62,18 @@ class RecipesEndpoint extends Endpoint {
     return Recipe.db.find(
       session,
       orderBy: (t) => t.date,
+      where: (t) => t.deletedAt.equals(null),
       orderDescending: true,
     );
+  }
+
+  Future<void> deleteRecipe(Session session, int recipeId) async {
+    final recipe = await Recipe.db.findById(session, recipeId);
+    if (recipe == null) {
+      throw Exception('Recipe not found!');
+    }
+
+    recipe.deletedAt = DateTime.now();
+    await Recipe.db.updateRow(session, recipe);
   }
 }

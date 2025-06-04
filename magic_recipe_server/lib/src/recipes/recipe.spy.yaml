@@ -5,3 +5,4 @@ fields:
     text: String
     date: DateTime
     ingredients: String
+    deletedAt: DateTime?, scope = serverOnly

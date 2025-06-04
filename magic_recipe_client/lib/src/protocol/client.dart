@@ -32,9 +32,6 @@ class EndpointGreeting extends _i1.EndpointRef {
       );
 }
 
-/// This is the endpoint that will be used to generate a recipe using the
-/// Google Gemini API. It extends the Endpoint class and implements the
-/// generateRecipe method.
 /// {@category Endpoint}
 class EndpointRecipes extends _i1.EndpointRef {
   EndpointRecipes(_i1.EndpointCaller caller) : super(caller);
@@ -55,6 +52,13 @@ class EndpointRecipes extends _i1.EndpointRef {
         'recipes',
         'getRecipes',
         {},
+      );
+
+  _i2.Future<void> deleteRecipe(int recipeId) =>
+      caller.callServerEndpoint<void>(
+        'recipes',
+        'deleteRecipe',
+        {'recipeId': recipeId},
       );
 }
 
