@@ -24,11 +24,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  serverpod_flutter: 2.7.0
+  serverpod_flutter: 2.8.0
   magic_recipe_client:
     path: ../magic_recipe_client
-  serverpod_auth_shared_flutter: 2.7.0
-  serverpod_auth_email_flutter: 2.7.0
+  serverpod_auth_shared_flutter: 2.8.0
+  serverpod_auth_email_flutter: 2.8.0
 
 
   # The following adds the Cupertino Icons font to your application.
