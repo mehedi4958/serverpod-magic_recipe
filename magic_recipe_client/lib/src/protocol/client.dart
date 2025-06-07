@@ -11,10 +11,37 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
-import 'package:magic_recipe_client/src/protocol/greeting.dart' as _i3;
-import 'package:magic_recipe_client/src/protocol/recipes/recipe.dart' as _i4;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i5;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i3;
+import 'package:magic_recipe_client/src/protocol/greeting.dart' as _i4;
+import 'package:magic_recipe_client/src/protocol/recipes/recipe.dart' as _i5;
 import 'protocol.dart' as _i6;
+
+/// {@category Endpoint}
+class EndpointAdmin extends _i1.EndpointRef {
+  EndpointAdmin(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'admin';
+
+  _i2.Future<List<_i3.UserInfo>> listUsers() =>
+      caller.callServerEndpoint<List<_i3.UserInfo>>(
+        'admin',
+        'listUsers',
+        {},
+      );
+
+  _i2.Future<void> blockUser(int userId) => caller.callServerEndpoint<void>(
+        'admin',
+        'blockUser',
+        {'userId': userId},
+      );
+
+  _i2.Future<void> unblockUser(int userId) => caller.callServerEndpoint<void>(
+        'admin',
+        'unblockUser',
+        {'userId': userId},
+      );
+}
 
 /// This is an example endpoint that returns a greeting message through its [hello] method.
 /// {@category Endpoint}
@@ -25,8 +52,8 @@ class EndpointGreeting extends _i1.EndpointRef {
   String get name => 'greeting';
 
   /// Returns a personalized greeting message: "Hello {name}".
-  _i2.Future<_i3.Greeting> hello(String name) =>
-      caller.callServerEndpoint<_i3.Greeting>(
+  _i2.Future<_i4.Greeting> hello(String name) =>
+      caller.callServerEndpoint<_i4.Greeting>(
         'greeting',
         'hello',
         {'name': name},
@@ -41,15 +68,15 @@ class EndpointRecipes extends _i1.EndpointRef {
   String get name => 'recipes';
 
   /// Pass in a string containing the ingredients and get a recipe back.
-  _i2.Future<_i4.Recipe> generateRecipe(String ingredients) =>
-      caller.callServerEndpoint<_i4.Recipe>(
+  _i2.Future<_i5.Recipe> generateRecipe(String ingredients) =>
+      caller.callServerEndpoint<_i5.Recipe>(
         'recipes',
         'generateRecipe',
         {'ingredients': ingredients},
       );
 
-  _i2.Future<List<_i4.Recipe>> getRecipes() =>
-      caller.callServerEndpoint<List<_i4.Recipe>>(
+  _i2.Future<List<_i5.Recipe>> getRecipes() =>
+      caller.callServerEndpoint<List<_i5.Recipe>>(
         'recipes',
         'getRecipes',
         {},
@@ -65,10 +92,10 @@ class EndpointRecipes extends _i1.EndpointRef {
 
 class Modules {
   Modules(Client client) {
-    auth = _i5.Caller(client);
+    auth = _i3.Caller(client);
   }
 
-  late final _i5.Caller auth;
+  late final _i3.Caller auth;
 }
 
 class Client extends _i1.ServerpodClientShared {
@@ -97,10 +124,13 @@ class Client extends _i1.ServerpodClientShared {
           disconnectStreamsOnLostInternetConnection:
               disconnectStreamsOnLostInternetConnection,
         ) {
+    admin = EndpointAdmin(this);
     greeting = EndpointGreeting(this);
     recipes = EndpointRecipes(this);
     modules = Modules(this);
   }
+
+  late final EndpointAdmin admin;
 
   late final EndpointGreeting greeting;
 
@@ -110,6 +140,7 @@ class Client extends _i1.ServerpodClientShared {
 
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
+        'admin': admin,
         'greeting': greeting,
         'recipes': recipes,
       };

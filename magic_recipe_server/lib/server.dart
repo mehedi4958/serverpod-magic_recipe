@@ -36,6 +36,16 @@ void run(List<String> args) async {
         print('Validation code: $validationCode');
         return true;
       },
+      onUserCreated: (Session session, auth.UserInfo userInfo) async {
+        if (userInfo.email?.endsWith('babu.oshi@gmail.com') ?? false) {
+          await auth.Users.updateUserScopes(
+              session, userInfo.id!, {Scope.admin});
+          session.log(
+            'User ${userInfo.email} created with admin scope',
+            level: LogLevel.info,
+          );
+        }
+      },
     ),
   );
 
